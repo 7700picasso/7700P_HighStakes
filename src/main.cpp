@@ -30,6 +30,8 @@ motor Intake (PORT14, ratio18_1, false);
 motor Lifter (PORT18, ratio6_1, true);
 
 digital_out Clampy = digital_out(Brain.ThreeWirePort.A);
+
+inertial Gyro (PORT20); 
 /*---------------------------------------------------------------------------*/
 
  void drive (int rspeed, int lspeed, int wt){                      
@@ -42,16 +44,74 @@ digital_out Clampy = digital_out(Brain.ThreeWirePort.A);
   RB.spin(fwd, rspeed, pct);
 
   wait (wt, msec);        
-                                                         
+                                             
 }
 
-void useless(){ 
-  
+void driveBrake () {
+  LF.stop(brake); 
+  LM.stop(brake); 
+  LB.stop(brake); 
+
+  RF.stop(brake); 
+  RM.stop(brake); 
+  RB.stop(brake); 
+
 }
 
-void inchDrive(){
-  
+void olGyroTurn(float target, int speed)
+{
+	float heading20 = 0;
+  Gyro.setRotation(0, degrees); 
+
+	while (heading20<=target) 
+	{
+    heading20=Gyro.rotation(degrees); 
+    drive(speed, -speed, 10);
+    wait(10,msec);
+	 }
+	
+	drive(0, 0, 0);
 }
+
+void gyroTurn(float target)
+{
+		float heading=0.0; //initialize a variable for heading
+		float accuracy=2.0; //how accurate to make the turn in degrees
+		float error=target-heading;
+		float kp=5.0;
+		float speed=kp*error;
+		Gyro.setRotation(0.0, degrees);  //reset Gyro to zero degrees
+		
+		while(fabs(error)>=accuracy)
+		{
+			speed=kp*error;
+			drive(speed, -speed, 10); //turn right at speed
+			heading=Gyro.rotation();  //measure the heading of the robot
+			error=target-heading;  //calculate error
+		}
+			drive(0, 0, 0);  //stope the drive
+}
+
+void inchDriveP(float target){
+  float x=0;
+  float error=target;
+  float kp=1.0;
+  float speed =kp*error;
+  float accuracy=1.0;
+LF.setPosition(0.0, rev);
+while(fabs(error)>accuracy){
+drive(speed,speed,10);
+x=LF.position(rev)*PI*D*G;
+error=target-x;
+speed=kp*error;
+}
+drive(0,0,9);
+}
+
+
+
+
+
 
   double YOFFSET = 20; //offset for the display
 //Writes a line for the diagnostics of a motor on the Brain
@@ -175,7 +235,11 @@ void pre_auton(void) {
 
 void autonomous(void) {
   // ..........................................................................
-  // Insert autonomous user code here.
+  
+  //inchDriveP(-25); 
+  gyroTurn(90); 
+
+
   // ..........................................................................
 }
 
