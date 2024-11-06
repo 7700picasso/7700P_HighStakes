@@ -32,6 +32,10 @@ motor Lifter (PORT18, ratio6_1, true);
 digital_out Clampy = digital_out(Brain.ThreeWirePort.A);
 
 inertial Gyro (PORT20); 
+float G  = 0.75;
+float D = 3.25;
+float PI = 3.14;
+
 /*---------------------------------------------------------------------------*/
 
  void drive (int rspeed, int lspeed, int wt){                      
@@ -61,31 +65,31 @@ void driveBrake () {
 void olGyroTurn(float target, int speed)
 {
 	float heading20 = 0;
-  Gyro.setRotation(0, degrees); 
+ Gyro.setRotation(0, degrees);
 
-	while (heading20<=target) 
+	while (heading20<=target)
 	{
-    heading20=Gyro.rotation(degrees); 
-    drive(speed, -speed, 10);
-    wait(10,msec);
-	 }
+ heading20=Gyro.rotation(degrees);
+ drive(speed, -speed, 10);
+ wait(10,msec);
+	}
 	
 	drive(0, 0, 0);
 }
 
 void gyroTurn(float target)
-{
+{   
 		float heading=0.0; //initialize a variable for heading
 		float accuracy=2.0; //how accurate to make the turn in degrees
 		float error=target-heading;
-		float kp=5.0;
+		float kp=0.435;
 		float speed=kp*error;
 		Gyro.setRotation(0.0, degrees);  //reset Gyro to zero degrees
 		
 		while(fabs(error)>=accuracy)
 		{
 			speed=kp*error;
-			drive(speed, -speed, 10); //turn right at speed
+			drive(-speed, speed, 10); //turn right at speed
 			heading=Gyro.rotation();  //measure the heading of the robot
 			error=target-heading;  //calculate error
 		}
@@ -95,7 +99,7 @@ void gyroTurn(float target)
 void inchDriveP(float target){
   float x=0;
   float error=target;
-  float kp=1.0;
+  float kp=3.0;
   float speed =kp*error;
   float accuracy=1.0;
 LF.setPosition(0.0, rev);
@@ -214,13 +218,53 @@ void clampPush(bool push){
   Clampy.set(push);
 }
 
+void Drawgui(){
+  /*Brain.Screen.clearScreen();
+  wait(100, msec);*/
+  Brain.Screen.setPenColor(red);
+  Brain.Screen.setFillColor(red);
+  Brain.Screen.drawRectangle(10, 60, 150, 150);
+  Brain.Screen.drawRectangle(170, 60, 150, 150);
+  Brain.Screen.drawRectangle(330, 60, 150, 150);
+  Brain.Screen.setPenColor(black);
+  Brain.Screen.printAt(30, 130, "Match");
+  Brain.Screen.setFillColor(green);
+  Brain.Screen.printAt(190, 130, "Skills");
+  Brain.Screen.setFillColor(blue);
+  Brain.Screen.printAt(370, 130, "N/A");
+}
 
+int Case = 0;
+
+void Autonselector(){
+  int Xpos = Brain.Screen.xPosition();
+  int Ypos = Brain.Screen.yPosition();
+  
+  if(Xpos > 10 and Xpos < 160 and Ypos > 60 and Ypos < 210){
+  Brain.Screen.setPenColor(white);
+  Brain.Screen.setFillColor(white);
+  Brain.Screen.drawRectangle(10, 60, 150, 150);
+  Case = 1;
+  }
+  else if(Xpos > 170 and Xpos < 320 and Ypos > 60 and Ypos < 210){
+  Brain.Screen.setPenColor(white);
+  Brain.Screen.setFillColor(white);
+  Brain.Screen.drawRectangle(170, 60, 150, 150);
+  Case = 2;
+  }
+
+  else if(Xpos > 330 and Xpos < 480 and Ypos > 60 and Ypos < 210){
+  Brain.Screen.setPenColor(white);
+  Brain.Screen.setFillColor(white);
+  Brain.Screen.drawRectangle(330, 60, 150, 150);
+  Case = 3;
+}
+}
 /*---------------------------------------------------------------------------*/
 
 void pre_auton(void) {
-
-  // All activities that occur before the competition starts
-  // Example: clearing encoders, setting servo positions, ...
+Brain.Screen.pressed(Autonselector);
+Drawgui();
 }
 
 /*---------------------------------------------------------------------------*/
@@ -236,9 +280,51 @@ void pre_auton(void) {
 void autonomous(void) {
   // ..........................................................................
   
-  //inchDriveP(-25); 
-  gyroTurn(90); 
-
+switch(Case)
+{
+  case 0: {
+    Brain.Screen.clearScreen();
+  }
+  break;
+case 1: {
+clampPush(true);
+  inchDriveP(-27.5);
+  clampPush(false);
+  inchDriveP(-5);
+  Lifter.spin(fwd, 70, pct);
+}
+break;
+case 2:{
+Intake.spin(fwd, 100, pct);
+Lifter.spin(fwd,50, pct);
+wait(1000, msec);
+inchDriveP(15.5);
+wait(10, msec);
+gyroTurn(87);
+wait(10, msec);
+clampPush(true);
+wait(10, msec);
+inchDriveP(-18);
+wait(10, msec);
+clampPush(false);
+wait(10, msec);
+gyroTurn(170);
+wait(10, msec);
+inchDriveP(38);
+wait(1000, msec);
+inchDriveP(-5);
+wait(10, msec);
+gyroTurn(-85);
+wait(10, msec);
+inchDriveP(10);
+wait(10, msec);
+gyroTurn(-110);
+wait(10, msec);
+inchDriveP(-5);
+wait(10, msec);
+clampPush(true);
+}
+}
 
   // ..........................................................................
 }
@@ -277,6 +363,10 @@ void usercontrol(void) {
     else if (Controller1.ButtonR2.pressing()){
       Intake.spin(reverse,100, pct);
       Lifter.spin(reverse,50, pct);
+    }
+    else if (Controller1.ButtonUp.pressing()){
+      Intake.stop();
+      Lifter.stop();
     }
     // ........................................................................
 
