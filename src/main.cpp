@@ -308,21 +308,26 @@ inchDriveP(-18);
 wait(10, msec);
 clampPush(false);
 wait(10, msec);
-gyroTurn(170);
+gyroTurn(175);
 wait(10, msec);
 inchDriveP(38);
-wait(1000, msec);
-inchDriveP(-5);
+wait(2000, msec);
+Intake.stop();
+inchDriveP(-10);
 wait(10, msec);
-gyroTurn(-85);
+gyroTurn(-100);
 wait(10, msec);
+Intake.spin(fwd, 100, pct);
+Lifter.spin(fwd, 50, pct);
 inchDriveP(10);
 wait(10, msec);
 gyroTurn(-110);
 wait(10, msec);
-inchDriveP(-5);
-wait(10, msec);
+inchDriveP(-15);
+wait(1000, msec);
 clampPush(true);
+wait(10, msec);
+inchDriveP(15);
 }
 }
 
