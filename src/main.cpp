@@ -82,7 +82,7 @@ void gyroTurn(float target)
 		float heading=0.0; //initialize a variable for heading
 		float accuracy=2.0; //how accurate to make the turn in degrees
 		float error=target-heading;
-		float kp=0.435;
+		float kp=0.45;
 		float speed=kp*error;
 		Gyro.setRotation(0.0, degrees);  //reset Gyro to zero degrees
 		
@@ -308,7 +308,7 @@ inchDriveP(-18);
 wait(10, msec);
 clampPush(false);
 wait(10, msec);
-gyroTurn(175);
+gyroTurn(165);
 wait(10, msec);
 inchDriveP(38);
 wait(10, msec);
