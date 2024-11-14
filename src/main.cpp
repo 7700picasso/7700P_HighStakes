@@ -287,11 +287,22 @@ switch(Case)
   }
   break;
 case 1: {
-clampPush(true);
+  /*clampPush(true);
   inchDriveP(-27.5);
   clampPush(false);
   inchDriveP(-5);
+  Lifter.spin(fwd, 70, pct);*/
+  clampPush(true);
+  inchDriveP(-18);
+  gyroTurn(-45);
+  inchDriveP(-17);
+  clampPush(false);
+  wait(1000, msec);
   Lifter.spin(fwd, 70, pct);
+  wait(200, msec);
+  gyroTurn(-55);
+  inchDriveP(18);
+
 }
 break;
 case 2:{
