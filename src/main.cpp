@@ -30,6 +30,7 @@ motor Intake (PORT14, ratio18_1, false);
 motor Lifter (PORT18, ratio6_1, true);
 
 digital_out Clampy = digital_out(Brain.ThreeWirePort.A);
+digital_out Doinker = digital_out(Brain.ThreeWirePort.B);
 
 inertial Gyro (PORT20); 
 float G  = 0.75;
@@ -373,6 +374,22 @@ void usercontrol(void) {
     else if (Controller1.ButtonB.pressing()){
     clampPush(false);
     }
+
+while (toggle<3){
+  int toggle = 0;
+  if (toggle = 0 OR toggle = 2 && Controller1.ButtonX.pressing(){
+    toggle = 1;
+    clampPush(true);
+    })
+    else if (toggle = 1 && Controller1.ButtonX.pressing){
+      clampPush(true);
+      toggle = 2;
+    }
+}
+
+    if (Controller1.ButtonX.pressing(){
+    clampPush(toggle);
+    })
 
     if (Controller1.ButtonR1.pressing()){
       Intake.spin(fwd, 100, pct);
