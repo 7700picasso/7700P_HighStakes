@@ -33,6 +33,7 @@ digital_out Clampy = digital_out(Brain.ThreeWirePort.A);
 digital_out Doinker = digital_out(Brain.ThreeWirePort.B);
 
 inertial Gyro (PORT20); 
+
 float G  = 0.75;
 float D = 3.25;
 float PI = 3.14;
@@ -261,8 +262,10 @@ void Autonselector(){
 /*---------------------------------------------------------------------------*/
 
 void pre_auton(void) {
+  Drawgui();
 Brain.Screen.pressed(Autonselector);
-Drawgui();
+
+ Brain.Screen.clearScreen(); 
 }
 
 /*---------------------------------------------------------------------------*/
@@ -357,8 +360,11 @@ inchDriveP(15);
 
 void usercontrol(void) {
   // User control code here, inside the loop
+
+
   while (1) {
-    Display();
+     Brain.Screen.clearScreen(); 
+    //Display();
     
     int lspeed = Controller1.Axis3.position(pct);
     int rspeed = Controller1.Axis2.position(pct);
@@ -367,16 +373,23 @@ void usercontrol(void) {
 
     if (Controller1.ButtonA.pressing()){
     clampPush(true);
+    Doinker.set(true);
+    Brain.Screen.printAt(10, 100, "Doinker working"); 
     }
     else if (Controller1.ButtonB.pressing()){
     clampPush(false);
+    Doinker.set(false);
+     Brain.Screen.printAt(10, 100, "Doinker ALSO working"); 
     }
 
     if (Controller1.ButtonX.pressing()){
-    doinkPush(true);
+    Doinker.set(true);
+    Brain.Screen.printAt(10, 100, "Doinker working");     
     }
+
     else if (Controller1.ButtonY.pressing()){
-    doinkPush(false);
+    Doinker.set(false);
+     Brain.Screen.printAt(10, 100, "Doinker ALSO working"); 
     }
     
   //  // bool toggle = false;
