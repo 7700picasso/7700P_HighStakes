@@ -364,7 +364,7 @@ void usercontrol(void) {
 
   while (1) {
      Brain.Screen.clearScreen(); 
-    //Display();
+    Display();
     
     int lspeed = Controller1.Axis3.position(pct);
     int rspeed = Controller1.Axis2.position(pct);
