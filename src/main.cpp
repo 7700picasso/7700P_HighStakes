@@ -39,7 +39,7 @@ float PI = 3.14;
 
 /*---------------------------------------------------------------------------*/
 
- void drive (int rspeed, int lspeed, int wt){                      
+void drive (int rspeed, int lspeed, int wt){                      
   LF.spin(fwd, lspeed, pct);
   LM.spin(fwd, lspeed, pct);  
   LB.spin(fwd, lspeed, pct);
@@ -48,8 +48,7 @@ float PI = 3.14;
   RM.spin(fwd, rspeed, pct);  
   RB.spin(fwd, rspeed, pct);
 
-  wait (wt, msec);        
-                                             
+  wait (wt, msec);                                                   
 }
 
 void driveBrake () {
@@ -63,16 +62,14 @@ void driveBrake () {
 
 }
 
-void olGyroTurn(float target, int speed)
-{
+void olGyroTurn(float target, int speed){
 	float heading20 = 0;
- Gyro.setRotation(0, degrees);
+  Gyro.setRotation(0, degrees);
 
-	while (heading20<=target)
-	{
- heading20=Gyro.rotation(degrees);
- drive(speed, -speed, 10);
- wait(10,msec);
+	while (heading20<=target){
+    heading20=Gyro.rotation(degrees);
+    drive(speed, -speed, 10);
+    wait(10,msec);
 	}
 	
 	drive(0, 0, 0);
@@ -80,21 +77,20 @@ void olGyroTurn(float target, int speed)
 
 void gyroTurn(float target)
 {   
-		float heading=0.0; //initialize a variable for heading
-		float accuracy=2.0; //how accurate to make the turn in degrees
-		float error=target-heading;
-		float kp=0.45;
-		float speed=kp*error;
-		Gyro.setRotation(0.0, degrees);  //reset Gyro to zero degrees
-		
-		while(fabs(error)>=accuracy)
-		{
-			speed=kp*error;
-			drive(-speed, speed, 10); //turn right at speed
-			heading=Gyro.rotation();  //measure the heading of the robot
-			error=target-heading;  //calculate error
-		}
-			drive(0, 0, 0);  //stope the drive
+  float heading=0.0; //initialize a variable for heading
+  float accuracy=2.0; //how accurate to make the turn in degrees
+  float error=target-heading;
+  float kp=0.45;
+  float speed=kp*error;
+  Gyro.setRotation(0.0, degrees);  //reset Gyro to zero degrees
+  
+  while(fabs(error)>=accuracy){
+    speed=kp*error;
+    drive(-speed, speed, 10); //turn right at speed
+    heading=Gyro.rotation();  //measure the heading of the robot
+    error=target-heading;  //calculate error
+  }
+    drive(0, 0, 0);  //stope the drive
 }
 
 void inchDriveP(float target){
@@ -103,81 +99,78 @@ void inchDriveP(float target){
   float kp=3.0;
   float speed =kp*error;
   float accuracy=1.0;
-LF.setPosition(0.0, rev);
-while(fabs(error)>accuracy){
-drive(speed,speed,10);
-x=LF.position(rev)*PI*D*G;
-error=target-x;
-speed=kp*error;
+  LF.setPosition(0.0, rev);
+
+  while(fabs(error)>accuracy){
+    drive(speed,speed,10);
+    x=LF.position(rev)*PI*D*G;
+    error=target-x;
+    speed=kp*error;
+  }
+  drive(0,0,9);
 }
-drive(0,0,9);
-}
 
 
-
-
-
-
-  double YOFFSET = 20; //offset for the display
+double YOFFSET = 20; //offset for the display
 //Writes a line for the diagnostics of a motor on the Brain
 void MotorDisplay(double y, double curr, double temp)
 {
-Brain.Screen.setFillColor(transparent);
-Brain.Screen.printAt(5, YOFFSET + y, "Current: %.1fA", curr);
-if (curr < 1)
-Brain.Screen.setFillColor(green);
-else if (curr >= 1 && curr  <= 2.5)
-Brain.Screen.setFillColor(yellow);
-else
-Brain.Screen.setFillColor(red);
-Brain.Screen.drawRectangle(140, YOFFSET + y - 15, 15, 15);
+  Brain.Screen.setFillColor(transparent);
+  Brain.Screen.printAt(5, YOFFSET + y, "Current: %.1fA", curr);
+  
+  if (curr < 1)
+    Brain.Screen.setFillColor(green);
+  else if (curr >= 1 && curr  <= 2.5)
+    Brain.Screen.setFillColor(yellow);
+  else
+    Brain.Screen.setFillColor(red);
+    Brain.Screen.drawRectangle(140, YOFFSET + y - 15, 15, 15);
 
-Brain.Screen.setFillColor(transparent);
-Brain.Screen.printAt(160, YOFFSET + y, "Temp: %.1fC", temp);
-if (temp < 45)
-Brain.Screen.setFillColor(green);
-else if (temp <= 50 && temp  >= 45)
-// TRUE and TRUE --> True
-// TRUE and FALSE --> False
-// FALSE and FALSE --> False
-Brain.Screen.setFillColor(yellow);
-else
-Brain.Screen.setFillColor(red);
-Brain.Screen.drawRectangle(275, YOFFSET + y - 15, 15, 15);
-Brain.Screen.setFillColor(transparent);
+  Brain.Screen.setFillColor(transparent);
+  Brain.Screen.printAt(160, YOFFSET + y, "Temp: %.1fC", temp);
+  
+  if (temp < 45)
+    Brain.Screen.setFillColor(green);
+  else if (temp <= 50 && temp  >= 45)
+    // TRUE and TRUE --> True
+    // TRUE and FALSE --> False
+    // FALSE and FALSE --> False
+    Brain.Screen.setFillColor(yellow);
+  else
+    Brain.Screen.setFillColor(red);
+    Brain.Screen.drawRectangle(275, YOFFSET + y - 15, 15, 15);
+    Brain.Screen.setFillColor(transparent);
 }
 
 
 //Displays information on the brain
 void Display()
 {
-double leftFrontCurr = LF.current(amp);
-double leftFrontTemp = LF.temperature(celsius);
-double leftBackCurr = LB.current(amp);
-double leftBackTemp = LB.temperature(celsius);
-double rightFrontCurr = RF.current(amp);
-double rightFrontTemp = RF.temperature(celsius);
-double rightBackCurr = RB.current(amp);
-double rightBackTemp = RB.temperature(celsius);
-double rightMiddleCurr = RM.current(amp);
-double rightMiddleTemp = RM.temperature(celsius);
-double leftMiddleCurr = LM.current(amp);
-double leftMiddleTemp = RM.temperature(celsius);
+  double leftFrontCurr = LF.current(amp);
+  double leftFrontTemp = LF.temperature(celsius);
+  double leftBackCurr = LB.current(amp);
+  double leftBackTemp = LB.temperature(celsius);
+  double rightFrontCurr = RF.current(amp);
+  double rightFrontTemp = RF.temperature(celsius);
+  double rightBackCurr = RB.current(amp);
+  double rightBackTemp = RB.temperature(celsius);
+  double rightMiddleCurr = RM.current(amp);
+  double rightMiddleTemp = RM.temperature(celsius);
+  double leftMiddleCurr = LM.current(amp);
+  double leftMiddleTemp = RM.temperature(celsius);
 
 
-if (LF.installed())
-{
-MotorDisplay(1, leftFrontCurr, leftFrontTemp);
-Brain.Screen.printAt(300, YOFFSET + 1, "LeftFront");
-}
-else
-Brain.Screen.printAt(5, YOFFSET + 1, "LeftFront Problem");
+  if (LF.installed()){
+    MotorDisplay(1, leftFrontCurr, leftFrontTemp);
+    Brain.Screen.printAt(300, YOFFSET + 1, "LeftFront");
+  }else
+    Brain.Screen.printAt(5, YOFFSET + 1, "LeftFront Problem");
 
-if (LB.installed())
-{
-MotorDisplay(31, leftBackCurr, leftBackTemp);
-Brain.Screen.printAt(300, YOFFSET + 31, "LeftBack");
-}
+  if (LB.installed())
+  {
+  MotorDisplay(31, leftBackCurr, leftBackTemp);
+  Brain.Screen.printAt(300, YOFFSET + 31, "LeftBack");
+  }
 
 else
 Brain.Screen.printAt(5, YOFFSET + 31, "LeftBack Problem");
@@ -217,6 +210,10 @@ Brain.Screen.printAt(5, YOFFSET + 151, "LeftMiddle Problem");
 
 void clampPush(bool push){
   Clampy.set(push);
+}
+
+void doinkPush(bool push){
+  Doinker.set(push);
 }
 
 void Drawgui(){
@@ -375,21 +372,25 @@ void usercontrol(void) {
     clampPush(false);
     }
 
-while (toggle<3){
-  int toggle = 0;
-  if (toggle = 0 OR toggle = 2 && Controller1.ButtonX.pressing(){
-    toggle = 1;
-    clampPush(true);
-    })
-    else if (toggle = 1 && Controller1.ButtonX.pressing){
-      clampPush(true);
-      toggle = 2;
+    if (Controller1.ButtonX.pressing()){
+    doinkPush(true);
     }
-}
+    else if (Controller1.ButtonY.pressing()){
+    doinkPush(false);
+    }
+    
+  //  // bool toggle = false;
+    
+  //   if ( (toggle == false) && Controller1.ButtonX.pressing()){
+  //     toggle = false;
+  //     doinkPush(true);
+      
+  //   }else if (toggle == true && Controller1.ButtonX.pressing()){
+  //       toggle = true;
+  //       doinkPush(false);
+  //   }
 
-    if (Controller1.ButtonX.pressing(){
-    clampPush(toggle);
-    })
+
 
     if (Controller1.ButtonR1.pressing()){
       Intake.spin(fwd, 100, pct);
