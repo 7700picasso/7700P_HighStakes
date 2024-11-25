@@ -371,15 +371,11 @@ void usercontrol(void) {
 
     drive(rspeed, lspeed, 10);
 
-    if (Controller1.ButtonA.pressing()){
+    if (Controller1.ButtonL2.pressing()){
     clampPush(true);
-    Doinker.set(true);
-    Brain.Screen.printAt(10, 100, "Doinker working"); 
     }
-    else if (Controller1.ButtonB.pressing()){
+    else if (Controller1.ButtonL1.pressing()){
     clampPush(false);
-    Doinker.set(false);
-     Brain.Screen.printAt(10, 100, "Doinker ALSO working"); 
     }
 
    // if (Controller1.ButtonX.pressing()){
