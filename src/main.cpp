@@ -37,7 +37,7 @@ inertial Gyro (PORT20);
 float G  = 0.75;
 float D = 3.25;
 float PI = 3.14;
-
+int toggle = 0; 
 /*---------------------------------------------------------------------------*/
 
 void drive (int rspeed, int lspeed, int wt){                      
@@ -361,11 +361,11 @@ inchDriveP(15);
 void usercontrol(void) {
   // User control code here, inside the loop
 
-
   while (1) {
+    
      Brain.Screen.clearScreen(); 
     Display();
-    
+    Brain.Screen.printAt(10, 200, "Toggle= %0.2f", toggle);
     int lspeed = Controller1.Axis3.position(pct);
     int rspeed = Controller1.Axis2.position(pct);
 
@@ -382,28 +382,43 @@ void usercontrol(void) {
      Brain.Screen.printAt(10, 100, "Doinker ALSO working"); 
     }
 
-    if (Controller1.ButtonX.pressing()){
-    Doinker.set(true);
-    Brain.Screen.printAt(10, 100, "Doinker working");     
-    }
+   // if (Controller1.ButtonX.pressing()){
+    //Doinker.set(true);
+   //Brain.Screen.printAt(10, 100, "Doinker working");     
+    //}
 
-    else if (Controller1.ButtonY.pressing()){
-    Doinker.set(false);
-     Brain.Screen.printAt(10, 100, "Doinker ALSO working"); 
-    }
+    //else if (Controller1.ButtonY.pressing()){
+    //Doinker.set(false);
+     //Brain.Screen.printAt(10, 100, "Doinker ALSO working"); 
+    //}
     
-  //  // bool toggle = false;
+     //bool toggle = false;
     
-  //   if ( (toggle == false) && Controller1.ButtonX.pressing()){
-  //     toggle = false;
-  //     doinkPush(true);
+    // if ( (toggle == false) && Controller1.ButtonX.pressing()){
+      // toggle = false;
+        //Doinker.set(false);
       
-  //   }else if (toggle == true && Controller1.ButtonX.pressing()){
-  //       toggle = true;
-  //       doinkPush(false);
-  //   }
-
-
+     //}else if (toggle == false && Controller1.ButtonX.pressing()){
+       //  toggle = true;
+         //Doinker.set(true);
+     //}
+    
+     
+    if (Controller1.ButtonX.pressing()){
+     toggle = toggle + 1;
+      if(toggle>1){
+    toggle = 0;
+    }
+    }
+   
+    if (toggle == 0){
+    Doinker.set(true);
+    Brain.Screen.printAt(10, 100, "Doinker working"); 
+    }
+    else if (toggle == 1){
+      Doinker.set(false);
+      Brain.Screen.printAt(10, 100, "Doinker ALSO working");
+    }
 
     if (Controller1.ButtonR1.pressing()){
       Intake.spin(fwd, 100, pct);
