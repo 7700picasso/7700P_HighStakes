@@ -400,21 +400,21 @@ void usercontrol(void) {
      //}
     
      
-    if (Controller1.ButtonX.pressing()){
-     toggle = toggle + 1;
-      if(toggle>1){
-    toggle = 0;
-    }
-    }
+    //if (Controller1.ButtonX.pressing()){
+     //toggle = toggle + 1;
+      //if(toggle>1){
+    //toggle = 0;
+    //}
+    //}
    
-    if (toggle == 0){
-    Doinker.set(true);
-    Brain.Screen.printAt(10, 100, "Doinker working"); 
-    }
-    else if (toggle == 1){
-      Doinker.set(false);
-      Brain.Screen.printAt(10, 100, "Doinker ALSO working");
-    }
+    //if (toggle == 0){
+    //Doinker.set(true);
+    //Brain.Screen.printAt(10, 100, "Doinker working"); 
+    //}
+    //else if (toggle == 1){
+      //Doinker.set(false);
+      //Brain.Screen.printAt(10, 100, "Doinker ALSO working");
+    //}
 
     if (Controller1.ButtonR1.pressing()){
       Intake.spin(fwd, 100, pct);
