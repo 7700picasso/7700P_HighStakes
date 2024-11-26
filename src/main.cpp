@@ -226,11 +226,11 @@ void Drawgui(){
   Brain.Screen.drawRectangle(170, 60, 150, 150);
   Brain.Screen.drawRectangle(330, 60, 150, 150);
   Brain.Screen.setPenColor(black);
-  Brain.Screen.printAt(30, 130, "Match");
+  Brain.Screen.printAt(30, 130, "Left match auto");
   Brain.Screen.setFillColor(green);
   Brain.Screen.printAt(190, 130, "Skills");
   Brain.Screen.setFillColor(blue);
-  Brain.Screen.printAt(370, 130, "N/A");
+  Brain.Screen.printAt(370, 130, "Right match auto");
 }
 
 int Case = 0;
@@ -263,9 +263,10 @@ void Autonselector(){
 
 void pre_auton(void) {
   Drawgui();
+    
 Brain.Screen.pressed(Autonselector);
 
- Brain.Screen.clearScreen(); 
+ 
 }
 
 /*---------------------------------------------------------------------------*/
@@ -288,39 +289,43 @@ switch(Case)
   }
   break;
 case 1: {
-  /*clampPush(true);
-  inchDriveP(-27.5);
-  clampPush(false);
-  inchDriveP(-5);
-  Lifter.spin(fwd, 70, pct);*/
   clampPush(true);
   inchDriveP(-18);
-  gyroTurn(-45);
-  inchDriveP(-17);
+  gyroTurn(30);
+  inchDriveP(-18);
   clampPush(false);
   wait(1000, msec);
   Lifter.spin(fwd, 70, pct);
+  Intake.spin(fwd, 100, pct);
   wait(200, msec);
-  gyroTurn(-55);
-  inchDriveP(18);
+  gyroTurn(50);
+  inchDriveP(20);
+  wait(1000, msec);
+  gyroTurn(-165);
+  Lifter.stop();
+  Intake.stop();
+  wait(10, msec);
+  inchDriveP(37);
 
 }
 break;
 case 2:{
+//Scores alliance stake.
 Intake.spin(fwd, 100, pct);
 Lifter.spin(fwd,50, pct);
 wait(1000, msec);
+//Gets mobile goal and scores 3 rings.
 inchDriveP(15.5);
 wait(10, msec);
 gyroTurn(87);
 wait(10, msec);
 clampPush(true);
 wait(10, msec);
-inchDriveP(-18);
+inchDriveP(-19.5);
 wait(10, msec);
 clampPush(false);
 wait(10, msec);
-gyroTurn(165);
+gyroTurn(162.5);
 wait(10, msec);
 inchDriveP(38);
 wait(10, msec);
@@ -340,13 +345,39 @@ wait(10, msec);
 inchDriveP(-15);
 wait(1000, msec);
 clampPush(true);
+Intake.stop();
+Lifter.stop();
 wait(10, msec);
-inchDriveP(15);
+inchDriveP(25);
+wait(10, msec);
+gyroTurn(-145);
+wait(10, msec);
+inchDriveP(-60);
+}
+break;
+case 3:{
+clampPush(true);
+  inchDriveP(-18);
+  gyroTurn(-45);
+  inchDriveP(-17);
+  clampPush(false);
+  wait(1000, msec);
+  Lifter.spin(fwd, 70, pct);
+  Intake.spin(fwd, 100, pct);
+  wait(200, msec);
+  gyroTurn(-55);
+  inchDriveP(20);
+  wait(1000, msec);
+  gyroTurn(170);
+  Lifter.stop();
+  Intake.stop();
+  wait(10, msec);
+  inchDriveP(37);
 }
 }
-
+}
   // ..........................................................................
-}
+
 
 /*---------------------------------------------------------------------------*/
 /*                                                                           */
