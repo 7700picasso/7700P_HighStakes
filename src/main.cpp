@@ -350,7 +350,6 @@ Lifter.stop();
 wait(10, msec);
 inchDriveP(26);
 wait(10, msec);
-gyroTurn(-154);
 wait(10, msec);
 inchDriveP(-60);
 wait(10, msec);
@@ -416,6 +415,10 @@ void usercontrol(void) {
     clampPush(false);
     }
    
+   
+    if (Controller1.ButtonX.pressing()){
+      toggle = toggle + 1;
+    }
     if (toggle == 0){
     Doinker.set(false);
     wait(100, msec); 
@@ -423,6 +426,10 @@ void usercontrol(void) {
     else if (toggle == 1){
       Doinker.set(true);
     wait(100, msec);
+    }
+    if(toggle == 2){
+      Doinker.set(false);
+      toggle = -1;
     }
 
     if (Controller1.ButtonR1.pressing()){
