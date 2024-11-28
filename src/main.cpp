@@ -321,14 +321,14 @@ gyroTurn(87);
 wait(10, msec);
 clampPush(true);
 wait(10, msec);
-inchDriveP(-19.5);
+inchDriveP(-19);
 wait(10, msec);
 clampPush(false);
 wait(10, msec);
-gyroTurn(162.5);
+gyroTurn(170);
 wait(10, msec);
 inchDriveP(38);
-wait(10, msec);
+wait(1000, msec);
 drive(100, 100, 1000);
 wait(10, msec);
 inchDriveP(-12);
@@ -338,21 +338,28 @@ gyroTurn(-100);
 wait(10, msec);
 Intake.spin(fwd, 100, pct);
 Lifter.spin(fwd, 50, pct);
-inchDriveP(10);
+inchDriveP(10.5);
 wait(1500, msec);
-gyroTurn(-120);
+gyroTurn(-105);
 wait(10, msec);
-inchDriveP(-15);
+inchDriveP(-12);
 wait(1000, msec);
 clampPush(true);
 Intake.stop();
 Lifter.stop();
 wait(10, msec);
-inchDriveP(25);
+inchDriveP(26);
 wait(10, msec);
-gyroTurn(-145);
+gyroTurn(-154);
 wait(10, msec);
 inchDriveP(-60);
+wait(10, msec);
+clampPush(false);
+gyroTurn(170);
+Intake.spin(fwd, 100, pct);
+Lifter.spin(fwd, 50, pct);
+wait(10, msec);
+inchDriveP(36);
 }
 break;
 case 3:{
@@ -402,50 +409,21 @@ void usercontrol(void) {
 
     drive(rspeed, lspeed, 10);
 
-    if (Controller1.ButtonL2.pressing()){
+    if (Controller1.ButtonA.pressing()){
     clampPush(true);
     }
-    else if (Controller1.ButtonL1.pressing()){
+    else if (Controller1.ButtonB.pressing()){
     clampPush(false);
     }
-
-   // if (Controller1.ButtonX.pressing()){
-    //Doinker.set(true);
-   //Brain.Screen.printAt(10, 100, "Doinker working");     
-    //}
-
-    //else if (Controller1.ButtonY.pressing()){
-    //Doinker.set(false);
-     //Brain.Screen.printAt(10, 100, "Doinker ALSO working"); 
-    //}
-    
-     //bool toggle = false;
-    
-    // if ( (toggle == false) && Controller1.ButtonX.pressing()){
-      // toggle = false;
-        //Doinker.set(false);
-      
-     //}else if (toggle == false && Controller1.ButtonX.pressing()){
-       //  toggle = true;
-         //Doinker.set(true);
-     //}
-    
-     
-    //if (Controller1.ButtonX.pressing()){
-     //toggle = toggle + 1;
-      //if(toggle>1){
-    //toggle = 0;
-    //}
-    //}
    
-    //if (toggle == 0){
-    //Doinker.set(true);
-    //Brain.Screen.printAt(10, 100, "Doinker working"); 
-    //}
-    //else if (toggle == 1){
-      //Doinker.set(false);
-      //Brain.Screen.printAt(10, 100, "Doinker ALSO working");
-    //}
+    if (toggle == 0){
+    Doinker.set(false);
+    wait(100, msec); 
+    }
+    else if (toggle == 1){
+      Doinker.set(true);
+    wait(100, msec);
+    }
 
     if (Controller1.ButtonR1.pressing()){
       Intake.spin(fwd, 100, pct);
