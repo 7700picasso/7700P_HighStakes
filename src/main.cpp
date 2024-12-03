@@ -289,6 +289,7 @@ switch(Case)
   }
   break;
 case 1: {
+
   clampPush(true);
   inchDriveP(-18);
   gyroTurn(30);
@@ -317,7 +318,7 @@ wait(1000, msec);
 //Gets mobile goal and scores 3 rings.
 inchDriveP(15.5);
 wait(10, msec);
-gyroTurn(87);
+gyroTurn(85);
 wait(10, msec);
 clampPush(true);
 wait(10, msec);
@@ -325,10 +326,10 @@ inchDriveP(-19.5);
 wait(10, msec);
 clampPush(false);
 wait(10, msec);
-gyroTurn(162.5);
+gyroTurn(170);
 wait(10, msec);
 inchDriveP(38);
-wait(10, msec);
+wait(1000, msec);
 drive(100, 100, 1000);
 wait(10, msec);
 inchDriveP(-12);
@@ -340,10 +341,11 @@ Intake.spin(fwd, 100, pct);
 Lifter.spin(fwd, 50, pct);
 inchDriveP(11);
 wait(1500, msec);
-gyroTurn(-100);
+inchDriveP(-5);
 wait(10, msec);
-inchDriveP(-12);
-wait(1000, msec);
+gyroTurn(-120);
+inchDriveP(-13);
+wait(100, msec);
 clampPush(true);
 Intake.stop();
 Lifter.stop();
@@ -351,9 +353,34 @@ wait(10, msec);
 inchDriveP(30);
 wait(10, msec);
 gyroTurn(-155);
+inchDriveP(-60);
 wait(10, msec);
-inc\
+clampPush(false);
+gyroTurn(170);
+Intake.spin(fwd, 100, pct);
+Lifter.spin(fwd, 50, pct);
+wait(10, msec);
+inchDriveP(32);
+wait(10, msec);
+drive(100, 100, 1000);
+wait(1000, msec);
+inchDriveP(-12);
+Intake.stop();
+wait(10, msec);
+gyroTurn(100);
+wait(10, msec);
+Intake.spin(fwd, 100, pct);
+Lifter.spin(fwd, 50, pct);
+inchDriveP(11);
+wait(1500, msec);
+gyroTurn(100);
+inchDriveP(-12);
+wait(100, msec);
 clampPush(true);
+Intake.stop();
+Lifter.stop();
+wait(10, msec);
+inchDriveP(30);
 }
 break;
 case 3:{
@@ -403,27 +430,28 @@ void usercontrol(void) {
 
     drive(rspeed, lspeed, 10);
 
-    if (Controller1.ButtonL2.pressing()){
+    if (Controller1.ButtonA.pressing()){
     clampPush(true);
     }
-    else if (Controller1.ButtonL1.pressing()){
+    else if (Controller1.ButtonB.pressing()){
     clampPush(false);
     }
-     
-    if (Controller1.ButtonX.pressing()){
-     toggle = toggle + 1;
-      if(toggle>1){
-    toggle = 0;
-    }
-    }
    
+   
+    if (Controller1.ButtonX.pressing()){
+      toggle = toggle + 1;
+    }
     if (toggle == 0){
     Doinker.set(false);
-    wait(100, msec);
+    wait(100, msec); 
     }
     else if (toggle == 1){
       Doinker.set(true);
-      wait(100, msec);
+    wait(100, msec);
+    }
+    if(toggle == 2){
+      Doinker.set(false);
+      toggle = -1;
     }
 
     if (Controller1.ButtonR1.pressing()){
