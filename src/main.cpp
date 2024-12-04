@@ -222,42 +222,65 @@ void Drawgui(){
   wait(100, msec);*/
   Brain.Screen.setPenColor(red);
   Brain.Screen.setFillColor(red);
-  Brain.Screen.drawRectangle(10, 60, 150, 150);
-  Brain.Screen.drawRectangle(170, 60, 150, 150);
-  Brain.Screen.drawRectangle(330, 60, 150, 150);
+  Brain.Screen.drawRectangle(10, 10, 230, 116);
+  Brain.Screen.drawRectangle(10, 262, 230, -126);
+  Brain.Screen.drawRectangle(250, 10, 230, 116);
+  Brain.Screen.drawRectangle(250, 262, 230, -126);
   Brain.Screen.setPenColor(black);
-  Brain.Screen.printAt(30, 130, "Left match auto");
+  Brain.Screen.printAt(65, 80, "Left match");
   Brain.Screen.setFillColor(green);
-  Brain.Screen.printAt(190, 130, "Skills");
+  Brain.Screen.printAt(85, 190, "Skills");
   Brain.Screen.setFillColor(blue);
-  Brain.Screen.printAt(370, 130, "Right match auto");
+  Brain.Screen.printAt(320, 80, "Right match");
+  Brain.Screen.setFillColor(yellow);
+  Brain.Screen.printAt(320, 190, "Eliminations");
 }
 
 int Case = 0;
-
+int depth = 0;
 void Autonselector(){
   int Xpos = Brain.Screen.xPosition();
   int Ypos = Brain.Screen.yPosition();
   
-  if(Xpos > 10 and Xpos < 160 and Ypos > 60 and Ypos < 210){
+  if(Xpos > 10 and Xpos < 220 and Ypos > 10 and Ypos < 126 && depth == 0){
   Brain.Screen.setPenColor(white);
   Brain.Screen.setFillColor(white);
-  Brain.Screen.drawRectangle(10, 60, 150, 150);
+  Brain.Screen.drawRectangle(10, 10, 230, 116);
   Case = 1;
   }
-  else if(Xpos > 170 and Xpos < 320 and Ypos > 60 and Ypos < 210){
+  else if(Xpos > 10 and Xpos < 220 and Ypos > 146 and Ypos < 262 && depth == 0){
   Brain.Screen.setPenColor(white);
   Brain.Screen.setFillColor(white);
-  Brain.Screen.drawRectangle(170, 60, 150, 150);
+  Brain.Screen.drawRectangle(10, 262, 230, -126);
   Case = 2;
   }
 
-  else if(Xpos > 330 and Xpos < 480 and Ypos > 60 and Ypos < 210){
+  else if(Xpos > 250 and Xpos < 470 and Ypos > 10 and Ypos < 126 && depth == 0){
   Brain.Screen.setPenColor(white);
   Brain.Screen.setFillColor(white);
-  Brain.Screen.drawRectangle(330, 60, 150, 150);
+  Brain.Screen.drawRectangle(250, 10, 230, 116);
   Case = 3;
-}
+  }
+  else if(Xpos > 250 and Xpos < 470 and Ypos > 146 and Ypos < 226 && depth == 0){
+    Brain.Screen.clearScreen();
+    Brain.Screen.setPenColor(red);
+    Brain.Screen.setFillColor(red);
+    Brain.Screen.drawRectangle(10, 10, 230, 136);
+    Brain.Screen.drawRectangle(250, 10, 230, 136);
+    depth = 1;
+   }
+  if(Xpos > 10 and Xpos < 240 and Ypos > 10 and Ypos < 146 && depth == 1){
+    Brain.Screen.setPenColor(white);
+    Brain.Screen.setFillColor(white);
+    Brain.Screen.drawRectangle(10, 10, 230, 136);
+    Case = 4;
+    }
+  if(Xpos > 250 and Xpos < 480 and Ypos > 10 and Ypos < 146 && depth == 1){
+    Brain.Screen.setPenColor(white);
+    Brain.Screen.setFillColor(white);
+    Brain.Screen.drawRectangle(250, 10, 230, 136);
+    Case = 5;
+    }
 }
 /*---------------------------------------------------------------------------*/
 
@@ -289,7 +312,6 @@ switch(Case)
   }
   break;
 case 1: {
-
   clampPush(true);
   inchDriveP(-18);
   gyroTurn(30);
@@ -384,6 +406,46 @@ inchDriveP(30);
 }
 break;
 case 3:{
+clampPush(true);
+  inchDriveP(-18);
+  gyroTurn(-45);
+  inchDriveP(-17);
+  clampPush(false);
+  wait(1000, msec);
+  Lifter.spin(fwd, 70, pct);
+  Intake.spin(fwd, 100, pct);
+  wait(200, msec);
+  gyroTurn(-55);
+  inchDriveP(20);
+  wait(1000, msec);
+  gyroTurn(170);
+  Lifter.stop();
+  Intake.stop();
+  wait(10, msec);
+  inchDriveP(37);
+}
+break;
+case 4:{
+clampPush(true);
+  inchDriveP(-18);
+  gyroTurn(30);
+  inchDriveP(-18);
+  clampPush(false);
+  wait(1000, msec);
+  Lifter.spin(fwd, 70, pct);
+  Intake.spin(fwd, 100, pct);
+  wait(200, msec);
+  gyroTurn(50);
+  inchDriveP(20);
+  wait(1000, msec);
+  gyroTurn(-165);
+  Lifter.stop();
+  Intake.stop();
+  wait(10, msec);
+  inchDriveP(37);
+}
+break;
+case 5:{
 clampPush(true);
   inchDriveP(-18);
   gyroTurn(-45);
