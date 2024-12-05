@@ -108,7 +108,24 @@ void inchDriveP(float target){
     error=target-x;
     speed=kp*error;
   }
-  drive(0,0,9);
+  drive(0,0,0);
+}
+
+void inchDriveSlow(float target){
+  float x=0;
+  float error=target;
+  float kp=3.0;
+  float speed =kp*error;
+  float accuracy=1.0;
+  LF.setPosition(0.0, rev);
+
+  while(fabs(error)>accuracy){
+    drive(speed,speed,1);
+    x=LF.position(rev)*PI*D*G;
+    error=target-x;
+    speed=kp*error;
+  }
+  drive(0,0,0);
 }
 
 
@@ -228,10 +245,10 @@ void Drawgui(){
   Brain.Screen.drawRectangle(250, 262, 230, -126);
   Brain.Screen.setPenColor(black);
   Brain.Screen.printAt(65, 80, "Left match");
-  Brain.Screen.setFillColor(green);
-  Brain.Screen.printAt(85, 190, "Skills");
   Brain.Screen.setFillColor(blue);
-  Brain.Screen.printAt(320, 80, "Right match");
+  Brain.Screen.printAt(85, 190, "Right Match");
+  Brain.Screen.setFillColor(green);
+  Brain.Screen.printAt(320, 80, "Skills");
   Brain.Screen.setFillColor(yellow);
   Brain.Screen.printAt(320, 190, "Eliminations");
 }
@@ -252,15 +269,16 @@ void Autonselector(){
   Brain.Screen.setPenColor(white);
   Brain.Screen.setFillColor(white);
   Brain.Screen.drawRectangle(10, 262, 230, -126);
-  Case = 2;
+  Case = 3;
   }
 
   else if(Xpos > 250 and Xpos < 470 and Ypos > 10 and Ypos < 126 && depth == 0){
   Brain.Screen.setPenColor(white);
   Brain.Screen.setFillColor(white);
   Brain.Screen.drawRectangle(250, 10, 230, 116);
-  Case = 3;
+  Case = 2;
   }
+
   else if(Xpos > 250 and Xpos < 470 and Ypos > 146 and Ypos < 226 && depth == 0){
     Brain.Screen.clearScreen();
     Brain.Screen.setPenColor(red);
@@ -311,119 +329,123 @@ switch(Case)
     Brain.Screen.clearScreen();
   }
   break;
-case 1: {
-  clampPush(true);
-  inchDriveP(-18);
-  gyroTurn(30);
-  inchDriveP(-18);
-  clampPush(false);
-  wait(1000, msec);
-  Lifter.spin(fwd, 70, pct);
-  Intake.spin(fwd, 100, pct);
-  wait(200, msec);
-  gyroTurn(50);
-  inchDriveP(20);
-  wait(1000, msec);
-  gyroTurn(-165);
-  Lifter.stop();
-  Intake.stop();
-  wait(10, msec);
-  inchDriveP(37);
+  case 1: {
+    clampPush(true);
+    inchDriveP(-18);
+    gyroTurn(30);
+    inchDriveP(-18);
+    clampPush(false);
+    wait(1000, msec);
+    Lifter.spin(fwd, 70, pct);
+    Intake.spin(fwd, 100, pct);
+    wait(200, msec);
+    gyroTurn(50);
+    inchDriveP(20);
+    wait(1000, msec);
+    gyroTurn(-165);
+    Lifter.stop();
+    Intake.stop();
+    wait(10, msec);
+    inchDriveP(37);
 
-}
-break;
-case 2:{
-//Scores alliance stake.
-Intake.spin(fwd, 100, pct);
-Lifter.spin(fwd,50, pct);
-wait(1000, msec);
-//Gets mobile goal and scores 3 rings.
-inchDriveP(15.5);
-wait(10, msec);
-gyroTurn(85);
-wait(10, msec);
-clampPush(true);
-wait(10, msec);
-inchDriveP(-19.5);
-wait(10, msec);
-clampPush(false);
-wait(10, msec);
-gyroTurn(170);
-wait(10, msec);
-inchDriveP(38);
-wait(1000, msec);
-drive(100, 100, 1000);
-wait(10, msec);
-inchDriveP(-12);
-Intake.stop();
-wait(10, msec);
-gyroTurn(-100);
-wait(10, msec);
-Intake.spin(fwd, 100, pct);
-Lifter.spin(fwd, 50, pct);
-inchDriveP(11);
-wait(1500, msec);
-inchDriveP(-5);
-wait(10, msec);
-gyroTurn(-120);
-inchDriveP(-13);
-wait(100, msec);
-clampPush(true);
-Intake.stop();
-Lifter.stop();
-wait(10, msec);
-inchDriveP(30);
-wait(10, msec);
-gyroTurn(-155);
-inchDriveP(-60);
-wait(10, msec);
-clampPush(false);
-gyroTurn(170);
-Intake.spin(fwd, 100, pct);
-Lifter.spin(fwd, 50, pct);
-wait(10, msec);
-inchDriveP(32);
-wait(10, msec);
-drive(100, 100, 1000);
-wait(1000, msec);
-inchDriveP(-12);
-Intake.stop();
-wait(10, msec);
-gyroTurn(100);
-wait(10, msec);
-Intake.spin(fwd, 100, pct);
-Lifter.spin(fwd, 50, pct);
-inchDriveP(11);
-wait(1500, msec);
-gyroTurn(100);
-inchDriveP(-12);
-wait(100, msec);
-clampPush(true);
-Intake.stop();
-Lifter.stop();
-wait(10, msec);
-inchDriveP(30);
-}
-break;
-case 3:{
-clampPush(true);
-  inchDriveP(-18);
-  gyroTurn(-45);
-  inchDriveP(-17);
-  clampPush(false);
-  wait(1000, msec);
-  Lifter.spin(fwd, 70, pct);
+  }
+  break;
+  case 2:{
+  //Scores alliance stake.
   Intake.spin(fwd, 100, pct);
-  wait(200, msec);
-  gyroTurn(-55);
-  inchDriveP(20);
+  Lifter.spin(fwd,50, pct);
   wait(1000, msec);
+  //Gets mobile goal and scores 3 rings.
+  inchDriveP(15.5);
+  wait(10, msec);
+  gyroTurn(85);
+  wait(10, msec);
+  clampPush(true);
+  wait(10, msec);
+  inchDriveSlow(-17.5);
+  wait(10, msec);
+  inchDriveSlow(-2);
+  wait(10, msec);
+  clampPush(false);
+  wait(10, msec);
   gyroTurn(170);
-  Lifter.stop();
+  wait(10, msec);
+  inchDriveP(38);
+  wait(1000, msec);
+  inchDriveP(-11);
   Intake.stop();
   wait(10, msec);
-  inchDriveP(37);
-}
+  gyroTurn(-100);
+  wait(10, msec);
+  Intake.spin(fwd, 100, pct);
+  Lifter.spin(fwd, 50, pct);
+  inchDriveP(11);
+  wait(1500, msec);
+  inchDriveP(-4);
+  wait(10, msec);
+  gyroTurn(-120);
+  inchDriveP(-12);
+  wait(100, msec);
+  clampPush(true);
+  Intake.stop();
+  Lifter.stop();
+  wait(10, msec);
+  inchDriveP(25);
+  wait(10, msec);
+  gyroTurn(-150);
+  inchDriveP(-55);
+  wait(10, msec);
+  inchDriveSlow(-5);
+  wait(10, msec);
+  clampPush(false);
+  gyroTurn(170);
+  Intake.spin(fwd, 100, pct);
+  Lifter.spin(fwd, 50, pct);
+  wait(10, msec);
+  inchDriveP(32);
+  wait(1500, msec);
+  gyroTurn(-90);
+  wait(10, msec);
+  inchDriveP(-10);
+  /*inchDriveP(-11);
+  Intake.stop();
+  wait(10, msec);
+  gyroTurn(100);
+  wait(10, msec);
+  Intake.spin(fwd, 100, pct);
+  Lifter.spin(fwd, 50, pct);
+  inchDriveP(11);
+  wait(1500, msec);
+  gyroTurn(100);
+  inchDriveP(-12);
+  wait(100, msec);
+  clampPush(true);
+  Intake.stop();
+  Lifter.stop();
+  wait(10, msec);
+  inchDriveP(30);*/
+  }
+  break;
+
+  case 3:{
+    clampPush(true);
+    inchDriveP(-18);
+    gyroTurn(-45);
+    inchDriveP(-17);
+    clampPush(false);
+    wait(1000, msec);
+    Lifter.spin(fwd, 70, pct);
+    Intake.spin(fwd, 100, pct);
+    wait(200, msec);
+    gyroTurn(-55);
+    inchDriveP(20);
+    wait(1000, msec);
+    gyroTurn(170);
+    Lifter.stop();
+    Intake.stop();
+    wait(10, msec);
+    inchDriveP(37);
+  }
 break;
 case 4:{
 clampPush(true);
