@@ -19,11 +19,11 @@ brain Brain;
 controller Controller1;
 
 motor LF (PORT3, ratio6_1, true);
-motor LM (PORT5, ratio6_1, true);
+motor LM (PORT5, ratio6_1, false);
 motor LB (PORT17, ratio6_1, true);
 
 motor RF (PORT12, ratio6_1, false);
-motor RM (PORT6, ratio6_1, false);
+motor RM (PORT19, ratio6_1, true);
 motor RB (PORT13, ratio6_1, false);
 
 motor Intake (PORT14, ratio18_1, false);
