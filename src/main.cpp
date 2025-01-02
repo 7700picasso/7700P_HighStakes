@@ -540,13 +540,13 @@ void usercontrol(void) {
 
     if (Controller1.ButtonR1.pressing()){
       Intake.spin(fwd, 100, pct);
-      Lifter.spin(fwd,50, pct);
+      Lifter.spin(fwd,100, pct);
     }
     else if (Controller1.ButtonR2.pressing()){
       Intake.spin(reverse,100, pct);
-      Lifter.spin(reverse,50, pct);
+      Lifter.spin(reverse,100, pct);
     }
-    else if (Controller1.ButtonUp.pressing()){
+    else {
       Intake.stop();
       Lifter.stop();
     }
