@@ -29,6 +29,9 @@ motor RB (PORT13, ratio6_1, false);
 motor Intake (PORT14, ratio18_1, false);
 motor Lifter (PORT18, ratio6_1, true);
 
+motor Arm (PORT1, ratio18_1, true);
+
+
 digital_out Clampy = digital_out(Brain.ThreeWirePort.A);
 digital_out Doinker = digital_out(Brain.ThreeWirePort.B);
 
@@ -550,6 +553,18 @@ void usercontrol(void) {
       Intake.stop();
       Lifter.stop();
     }
+
+    if (Controller1.ButtonL1.pressing()){
+      Arm.spin(fwd, 100, pct);
+    }
+    else if (Controller1.ButtonL2.pressing()){
+      Arm.spin(reverse,100, pct);
+    }
+    else {
+      Arm.stop();
+    }
+
+
     // ........................................................................
 
     wait(20, msec); // Sleep the task for a short amount of time to
