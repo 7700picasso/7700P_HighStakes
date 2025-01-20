@@ -179,7 +179,10 @@ void Display()
   double rightMiddleTemp = RM.temperature(celsius);
   double leftMiddleCurr = LM.current(amp);
   double leftMiddleTemp = RM.temperature(celsius);
-
+  double IntakerCur = Intake.current(amp);
+  double IntakerTemp = Intake.temperature(celsius);
+  double LiftCur = Lifter.current(amp);
+  double LiftTemp = Lifter.temperature(celsius);
 
   if (LF.installed()){
     MotorDisplay(1, leftFrontCurr, leftFrontTemp);
@@ -227,6 +230,22 @@ Brain.Screen.printAt(300, YOFFSET + 151, "LeftMiddle");
 }
 else
 Brain.Screen.printAt(5, YOFFSET + 151, "LeftMiddle Problem");
+
+if (Intake.installed())
+{
+MotorDisplay(181, IntakerCur, IntakerTemp);
+Brain.Screen.printAt(300, YOFFSET + 181, "Intake");
+}
+else
+Brain.Screen.printAt(5, YOFFSET + 181, "Intake Problem");
+
+if (Lifter.installed())
+{
+MotorDisplay(211, LiftCur, LiftTemp);
+Brain.Screen.printAt(300, YOFFSET + 211, "Lifter");
+}
+else
+Brain.Screen.printAt(5, YOFFSET + 211, "Lifter Problem");
 }
 
 void clampPush(bool push){
