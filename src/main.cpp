@@ -33,14 +33,18 @@ motor Arm (PORT1, ratio18_1, true);
 
 
 digital_out Clampy = digital_out(Brain.ThreeWirePort.A);
-digital_out Doinker = digital_out(Brain.ThreeWirePort.B);
+digital_out Doinker = digital_out(Brain.ThreeWirePort.D);
 
 inertial Gyro (PORT20); 
+
+rotation rotationSensor (PORT15);
 
 float G  = 0.75;
 float D = 3.25;
 float PI = 3.14;
 int toggle = 0; 
+float armPositions[] = {-0.0, -30.0, -200.0};
+int currentPositionindex = 0;
 /*---------------------------------------------------------------------------*/
 
 void drive (int rspeed, int lspeed, int wt){                      
@@ -81,20 +85,39 @@ void olGyroTurn(float target, int speed){
 
 void gyroTurn(float target)
 {   
-  float heading=0.0; //initialize a variable for heading
-  float accuracy=2.0; //how accurate to make the turn in degrees
+  float heading=0.0;
+  float accuracy=2.0;
   float error=target-heading;
   float kp=0.45;
   float speed=kp*error;
-  Gyro.setRotation(0.0, degrees);  //reset Gyro to zero degrees
+  Gyro.setRotation(0.0, degrees);
   
   while(fabs(error)>=accuracy){
     speed=kp*error;
-    drive(-speed, speed, 10); //turn right at speed
-    heading=Gyro.rotation();  //measure the heading of the robot
-    error=target-heading;  //calculate error
+    drive(-speed, speed, 10);
+    heading=Gyro.rotation();
+    error=target-heading;
   }
-    drive(0, 0, 0);  //stope the drive
+    drive(0, 0, 0);
+}
+
+void armRotationcontrol(float target){   
+  float position = 0.0;
+  float accuracy=0.1;
+  float error=target;
+  float kp=2.0;
+  float speed=0;
+  rotationSensor.resetPosition();
+  
+  while(fabs(error)>accuracy){
+    speed=kp*error;
+    position = rotationSensor.position(deg);
+    error = target - position;
+    if (speed > 100) speed = 100;
+    if (speed < -100) speed = -100;
+    Arm.spin(forward, speed, percent);
+  }
+  Arm.stop(hold);
 }
 
 void inchDriveP(float target){
@@ -573,16 +596,18 @@ void usercontrol(void) {
       Lifter.stop();
     }
 
-    if (Controller1.ButtonL1.pressing()){
-      Arm.spin(fwd, 100, pct);
-    }
-    else if (Controller1.ButtonL2.pressing()){
-      Arm.spin(reverse,100, pct);
-    }
-    else {
-      Arm.stop();
-    }
 
+    bool lastButtonpress = false;
+    rotationSensor.resetPosition();
+    armRotationcontrol(armPositions[currentPositionindex]);
+
+    if (Controller1.ButtonL1.pressing() && !lastButtonpress){
+      currentPositionindex++;
+      if(currentPositionindex >= sizeof(armPositions) / sizeof(armPositions[0])){
+        armRotationcontrol(armPositions[currentPositionindex]);
+    }
+    }
+    lastButtonpress = Controller1.ButtonL1.pressing();
 
     // ........................................................................
 
