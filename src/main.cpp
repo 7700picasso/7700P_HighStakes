@@ -43,8 +43,9 @@ float G  = 0.75;
 float D = 3.25;
 float PI = 3.14;
 int toggle = 0; 
-float armPositions[] = {-0.0, -30.0, -200.0};
+float armPositions[] = {0.0, -10.0, -90.0};
 int currentPositionindex = 0;
+float target = 0;
 /*---------------------------------------------------------------------------*/
 
 void drive (int rspeed, int lspeed, int wt){                      
@@ -101,21 +102,33 @@ void gyroTurn(float target)
     drive(0, 0, 0);
 }
 
-void armRotationcontrol(float target){   
+void changeTarget(){
+currentPositionindex++;
+if(currentPositionindex > 2){
+  currentPositionindex = 0;
+}
+target = armPositions[currentPositionindex];
+}
+
+void armRotationcontrol(){   
   float position = 0.0;
-  float accuracy=0.1;
-  float error=target;
-  float kp=2.0;
+  float accuracy= 2.0;
+  float error= target -position;
+  float kp=1.0;
   float speed=0;
-  rotationSensor.resetPosition();
   
-  while(fabs(error)>accuracy){
+  // rotationSensor.resetPosition(); // strange
+  
+  while(true){
+    Brain.Screen.printAt(20, 20, "index: %.1d", currentPositionindex);
     speed=kp*error;
     position = rotationSensor.position(deg);
     error = target - position;
-    if (speed > 100) speed = 100;
-    if (speed < -100) speed = -100;
+    if (speed > 100) {speed = 100;}
+    if (speed < -100) {speed = -100;}
+    if (target - position < accuracy) {Arm.stop(hold);}
     Arm.spin(forward, speed, percent);
+    
   }
   Arm.stop(hold);
 }
@@ -351,7 +364,7 @@ void pre_auton(void) {
   Drawgui();
     
 Brain.Screen.pressed(Autonselector);
-
+rotationSensor.resetPosition();
  
 }
 
@@ -548,11 +561,12 @@ clampPush(true);
 
 void usercontrol(void) {
   // User control code here, inside the loop
-
+ thread Thread = thread(armRotationcontrol);
+    Controller1.ButtonL1.pressed(changeTarget);
   while (1) {
     
      Brain.Screen.clearScreen(); 
-    Display();
+   Display();
     Brain.Screen.printAt(10, 200, "Toggle= %0.2f", toggle);
     int lspeed = Controller1.Axis3.position(pct);
     int rspeed = Controller1.Axis2.position(pct);
@@ -597,18 +611,18 @@ void usercontrol(void) {
     }
 
 
-    bool lastButtonpress = false;
-    rotationSensor.resetPosition();
-    armRotationcontrol(armPositions[currentPositionindex]);
+    // bool lastButtonpress = false;
+    // rotationSensor.resetPosition();
+    // armRotationcontrol(armPositions[currentPositionindex]);
 
-    if (Controller1.ButtonL1.pressing() && !lastButtonpress){
-      currentPositionindex++;
-      if(currentPositionindex >= sizeof(armPositions) / sizeof(armPositions[0])){
-        armRotationcontrol(armPositions[currentPositionindex]);
-    }
-    }
-    lastButtonpress = Controller1.ButtonL1.pressing();
-
+    // if (Controller1.ButtonL1.pressing() && !lastButtonpress){
+    //   currentPositionindex++;
+    //   if(currentPositionindex >= sizeof(armPositions) / sizeof(armPositions[0])){
+    //     armRotationcontrol(armPositions[currentPositionindex]);
+    // }
+    // }
+    // lastButtonpress = Controller1.ButtonL1.pressing();
+   
     // ........................................................................
 
     wait(20, msec); // Sleep the task for a short amount of time to
@@ -623,7 +637,6 @@ int main() {
   // Set up callbacks for autonomous and driver control periods.
   Competition.autonomous(autonomous);
   Competition.drivercontrol(usercontrol);
-
   // Run the pre-autonomous function.
   pre_auton();
 
