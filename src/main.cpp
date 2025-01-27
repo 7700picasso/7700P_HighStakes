@@ -43,7 +43,7 @@ float G  = 0.75;
 float D = 3.25;
 float PI = 3.14;
 int toggle = 0; 
-float armPositions[] = {0.0, -10.0, -90.0};
+float armPositions[] = {0.0, -10.0, -90.0, -110.0};
 int currentPositionindex = 0;
 float target = 0;
 /*---------------------------------------------------------------------------*/
@@ -104,7 +104,7 @@ void gyroTurn(float target)
 
 void changeTarget(){
 currentPositionindex++;
-if(currentPositionindex > 2){
+if(currentPositionindex > 3){
   currentPositionindex = 0;
 }
 target = armPositions[currentPositionindex];
