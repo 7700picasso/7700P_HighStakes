@@ -43,7 +43,7 @@ float G  = 0.75;
 float D = 3.25;
 float PI = 3.14;
 int toggle = 0; 
-float armPositions[] = {0.0, -10.0, -90.0, -110.0};
+float armPositions[] = {0.0, -10.0, -90.0, -97.0};
 int currentPositionindex = 0;
 float target = 0;
 /*---------------------------------------------------------------------------*/
@@ -390,17 +390,19 @@ switch(Case)
   case 1: {
     clampPush(true);
     inchDriveP(-18);
-    gyroTurn(30);
-    inchDriveP(-18);
+    gyroTurn(35);
+    inchDriveSlow(-13);
+    drive(-15, -15, 670);
+    driveBrake();
     clampPush(false);
-    wait(1000, msec);
+    wait(1500, msec);
     Lifter.spin(fwd, 70, pct);
     Intake.spin(fwd, 100, pct);
     wait(200, msec);
     gyroTurn(50);
-    inchDriveP(20);
-    wait(1000, msec);
-    gyroTurn(-165);
+    inchDriveP(21);
+    wait(1500, msec);
+    gyroTurn(-185);
     Lifter.stop();
     Intake.stop();
     wait(10, msec);
