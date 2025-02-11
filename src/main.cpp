@@ -563,13 +563,14 @@ clampPush(true);
 
 void usercontrol(void) {
   // User control code here, inside the loop
- thread Thread = thread(armRotationcontrol);
-    Controller1.ButtonL1.pressed(changeTarget);
+ //thread Thread(armRotationcontrol);
+   // Controller1.ButtonL1.pressed(changeTarget);
   while (1) {
-    
+      //  Brain.Screen.printAt(20, 60, "AP: %.2f", Arm.position(deg));
+//wait(10000, msec);
      Brain.Screen.clearScreen(); 
-   Display();
-    Brain.Screen.printAt(10, 200, "Toggle= %0.2f", toggle);
+   //Display();
+    //Brain.Screen.printAt(10, 200, "Toggle= %0.2f", toggle);
     int lspeed = Controller1.Axis3.position(pct);
     int rspeed = Controller1.Axis2.position(pct);
 
@@ -613,17 +614,21 @@ void usercontrol(void) {
     }
 
 
-    // bool lastButtonpress = false;
-    // rotationSensor.resetPosition();
-    // armRotationcontrol(armPositions[currentPositionindex]);
+       bool lastButtonpress = false;
+      rotationSensor.resetPosition();
 
-    // if (Controller1.ButtonL1.pressing() && !lastButtonpress){
-    //   currentPositionindex++;
-    //   if(currentPositionindex >= sizeof(armPositions) / sizeof(armPositions[0])){
-    //     armRotationcontrol(armPositions[currentPositionindex]);
-    // }
-    // }
-    // lastButtonpress = Controller1.ButtonL1.pressing();
+     // if (Controller1.ButtonL1.pressing() && !lastButtonpress){
+         //armRotationcontrol(armPositions[currentPositionindex]);
+
+       // currentPositionindex++;
+
+       // if(currentPositionindex >= sizeof(armPositions) / sizeof(armPositions[0])){
+          //armRotationcontrol(armPositions[currentPositionindex]);
+         // currentPositionindex; 
+
+      //}
+      //}
+     // lastButtonpress = Controller1.ButtonL1.pressing();
    
     // ........................................................................
 
