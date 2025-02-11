@@ -20,7 +20,7 @@ controller Controller1;
 
 motor LF (PORT3, ratio6_1, true);
 motor LM (PORT5, ratio6_1, false);
-motor LB (PORT17, ratio6_1, true);
+motor LB (PORT7, ratio6_1, true);
 
 motor RF (PORT12, ratio6_1, false);
 motor RM (PORT19, ratio6_1, true);
@@ -29,7 +29,7 @@ motor RB (PORT13, ratio6_1, false);
 motor Intake (PORT14, ratio18_1, false);
 motor Lifter (PORT18, ratio6_1, true);
 
-motor Arm (PORT1, ratio18_1, true);
+motor Arm (PORT1, ratio18_1, false);
 
 
 digital_out Clampy = digital_out(Brain.ThreeWirePort.A);
@@ -43,7 +43,7 @@ float G  = 0.75;
 float D = 3.25;
 float PI = 3.14;
 int toggle = 0; 
-float armPositions[] = {0.0, -10.0, -90.0, -97.0};
+float armPositions[] = {0.0, 10.0, 90.0, 97.0};
 int currentPositionindex = 0;
 float target = 0;
 /*---------------------------------------------------------------------------*/
@@ -81,7 +81,7 @@ void olGyroTurn(float target, int speed){
     wait(10,msec);
 	}
 	
-	drive(0, 0, 0);
+	driveBrake();
 }
 
 void gyroTurn(float target)
@@ -99,7 +99,7 @@ void gyroTurn(float target)
     heading=Gyro.rotation();
     error=target-heading;
   }
-    drive(0, 0, 0);
+    driveBrake();
 }
 
 void changeTarget(){
@@ -114,24 +114,54 @@ void armRotationcontrol(){
   float position = 0.0;
   float accuracy= 2.0;
   float error= target -position;
-  float kp=1.0;
+float kp=0.3                                   ;
+  float previousError = 0.0;  // Store the previous error for derivative control
+  float kd = 0.5;  // Derivative gain
   float speed=0;
   
   // rotationSensor.resetPosition(); // strange
   
-  while(true){
-    Brain.Screen.printAt(20, 20, "index: %.1d", currentPositionindex);
-    speed=kp*error;
+  while (true) {
+    target = armPositions[currentPositionindex];  // Keep updating target
     position = rotationSensor.position(deg);
     error = target - position;
-    if (speed > 100) {speed = 100;}
-    if (speed < -100) {speed = -100;}
-    if (target - position < accuracy) {Arm.stop(hold);}
-    Arm.spin(forward, speed, percent);
     
+
+     // Proportional term
+    float proportional = kp * error;
+    // Derivative term
+    float derivative = kd * (error - previousError);
+
+    // Combine proportional and derivative terms
+    speed = proportional + derivative;
+
+    // Store the current error as previousError for next iteration
+    previousError = error;
+
+    Brain.Screen.printAt(20, 20, "index: %d", currentPositionindex);
+    Brain.Screen.printAt(20, 40, "target: %.1f", target);
+    Brain.Screen.printAt(20, 60, "error: %.1f", error);
+// if (fabs(error) < 5 && fabs(Arm.velocity(percentUnits::pct)) < 5) { 
+//     Arm.stop(brakeType::hold);
+//     break;}
+    if (fabs(error) < accuracy) {
+      Arm.stop(brake);  // First brake
+      wait(50, msec);// Short pause for stabilization
+      Arm.stop(hold);   // Then hold position
+      //break;
+    }
+     else {
+      Arm.spin(forward, speed, percent);
+    }
+
+    wait(20, msec);  // Small delay to avoid excessive CPU usage
   }
-  Arm.stop(hold);
+  
 }
+    
+  
+  
+
 
 void inchDriveP(float target){
   float x=0;
@@ -147,7 +177,7 @@ void inchDriveP(float target){
     error=target-x;
     speed=kp*error;
   }
-  drive(0,0,0);
+  driveBrake();
 }
 
 void inchDriveSlow(float target){
@@ -164,7 +194,7 @@ void inchDriveSlow(float target){
     error=target-x;
     speed=kp*error;
   }
-  drive(0,0,0);
+  driveBrake();
 }
 
 
@@ -563,14 +593,18 @@ clampPush(true);
 
 void usercontrol(void) {
   // User control code here, inside the loop
- //thread Thread(armRotationcontrol);
-   // Controller1.ButtonL1.pressed(changeTarget);
+ thread Thread(armRotationcontrol);
+    Controller1.ButtonL1.pressed(changeTarget);
+    Brain.Screen.printAt(10, 200, "Toggle= %0.2f", toggle);
+    Brain.Screen.printAt(20, 80, "index: %d", currentPositionindex);
+    Brain.Screen.printAt(20, 100, "target: %.1f", target);
+    //Brain.Screen.printAt(20, 120, "error: %.1f", error);
   while (1) {
       //  Brain.Screen.printAt(20, 60, "AP: %.2f", Arm.position(deg));
 //wait(10000, msec);
      Brain.Screen.clearScreen(); 
    //Display();
-    //Brain.Screen.printAt(10, 200, "Toggle= %0.2f", toggle);
+    
     int lspeed = Controller1.Axis3.position(pct);
     int rspeed = Controller1.Axis2.position(pct);
 
@@ -614,21 +648,21 @@ void usercontrol(void) {
     }
 
 
-       bool lastButtonpress = false;
-      rotationSensor.resetPosition();
+    //    bool lastButtonpress = false;
+    //   rotationSensor.resetPosition();
 
-     // if (Controller1.ButtonL1.pressing() && !lastButtonpress){
-         //armRotationcontrol(armPositions[currentPositionindex]);
+    //  if (Controller1.ButtonL1.pressing() && !lastButtonpress){
+    //      armRotationcontrol(armPositions[currentPositionindex]);
 
-       // currentPositionindex++;
+    //     currentPositionindex++;
 
-       // if(currentPositionindex >= sizeof(armPositions) / sizeof(armPositions[0])){
-          //armRotationcontrol(armPositions[currentPositionindex]);
-         // currentPositionindex; 
+    //     if(currentPositionindex >= sizeof(armPositions) / sizeof(armPositions[0])){
+    //       armRotationcontrol(armPositions[currentPositionindex]);
+    //       currentPositionindex; 
 
-      //}
-      //}
-     // lastButtonpress = Controller1.ButtonL1.pressing();
+    //   }
+    //   }
+    //   lastButtonpress = Controller1.ButtonL1.pressing();
    
     // ........................................................................
 
