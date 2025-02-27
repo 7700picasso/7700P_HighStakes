@@ -595,15 +595,15 @@ void usercontrol(void) {
   // User control code here, inside the loop
  thread Thread(armRotationcontrol);
     Controller1.ButtonL1.pressed(changeTarget);
-    Brain.Screen.printAt(10, 200, "Toggle= %0.2f", toggle);
-    Brain.Screen.printAt(20, 80, "index: %d", currentPositionindex);
-    Brain.Screen.printAt(20, 100, "target: %.1f", target);
-    //Brain.Screen.printAt(20, 120, "error: %.1f", error);
+    // Brain.Screen.printAt(10, 200, "Toggle= %0.2f", toggle);
+    // Brain.Screen.printAt(20, 80, "index: %d", currentPositionindex);
+    // Brain.Screen.printAt(20, 100, "target: %.1f", target);
+    // Brain.Screen.printAt(20, 120, "error: %.1f", error);
   while (1) {
       //  Brain.Screen.printAt(20, 60, "AP: %.2f", Arm.position(deg));
 //wait(10000, msec);
      Brain.Screen.clearScreen(); 
-   //Display();
+   Display();
     
     int lspeed = Controller1.Axis3.position(pct);
     int rspeed = Controller1.Axis2.position(pct);
