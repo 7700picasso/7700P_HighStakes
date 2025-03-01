@@ -43,7 +43,7 @@ float G  = 0.75;
 float D = 3.25;
 float PI = 3.14;
 int toggle = 0; 
-float armPositions[] = {0.0, 10.0, 90.0, 97.0};
+float armPositions[] = {0.0, 12.5, 90.0, 97.0};
 int currentPositionindex = 0;
 float target = 0;
 /*---------------------------------------------------------------------------*/
@@ -112,11 +112,11 @@ target = armPositions[currentPositionindex];
 
 void armRotationcontrol(){   
   float position = 0.0;
-  float accuracy= 2.0;
+  float accuracy= 3.0;
   float error= target -position;
-float kp=0.3                                   ;
+float kp=1.5;                                   ;
   float previousError = 0.0;  // Store the previous error for derivative control
-  float kd = 0.5;  // Derivative gain
+  float kd = 0.1;  // Derivative gain
   float speed=0;
   
   // rotationSensor.resetPosition(); // strange
@@ -603,7 +603,7 @@ void usercontrol(void) {
       //  Brain.Screen.printAt(20, 60, "AP: %.2f", Arm.position(deg));
 //wait(10000, msec);
      Brain.Screen.clearScreen(); 
-   Display();
+  // Display();
     
     int lspeed = Controller1.Axis3.position(pct);
     int rspeed = Controller1.Axis2.position(pct);
