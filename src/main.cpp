@@ -603,7 +603,7 @@ void usercontrol(void) {
       //  Brain.Screen.printAt(20, 60, "AP: %.2f", Arm.position(deg));
 //wait(10000, msec);
      Brain.Screen.clearScreen(); 
-  // Display();
+      Display();
     
     int lspeed = Controller1.Axis3.position(pct);
     int rspeed = Controller1.Axis2.position(pct);
