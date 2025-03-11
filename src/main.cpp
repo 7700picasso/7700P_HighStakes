@@ -43,7 +43,7 @@ float G  = 0.75;
 float D = 3.25;
 float PI = 3.14;
 int toggle = 0; 
-float armPositions[] = {0.0, 12.5, 90.0, 97.0};
+float armPositions[] = {0.0, 15.0, 90.0, 97.0};
 int currentPositionindex = 0;
 float target = 0;
 /*---------------------------------------------------------------------------*/
@@ -341,7 +341,7 @@ void Drawgui(){
   Brain.Screen.printAt(320, 190, "Eliminations");
 }
 
-int Case = 0;
+int Case = 2;
 int depth = 0;
 void Autonselector(){
   int Xpos = Brain.Screen.xPosition();
@@ -420,19 +420,17 @@ switch(Case)
   case 1: {
     clampPush(true);
     inchDriveP(-18);
-    gyroTurn(35);
-    inchDriveSlow(-13);
-    drive(-15, -15, 670);
-    driveBrake();
+    gyroTurn(33);
+    inchDriveSlow(-14);
     clampPush(false);
-    wait(1500, msec);
+    wait(100, msec);
     Lifter.spin(fwd, 70, pct);
     Intake.spin(fwd, 100, pct);
     wait(200, msec);
-    gyroTurn(50);
+    gyroTurn(42.5);
     inchDriveP(21);
     wait(1500, msec);
-    gyroTurn(-185);
+    gyroTurn(-175);
     Lifter.stop();
     Intake.stop();
     wait(10, msec);
@@ -441,9 +439,9 @@ switch(Case)
   }
   break;
   case 2:{
-  //Scores alliance stake.
+  //Scores alliance stake. and cole is very sigma and has mid cut and is a mariners fan which is cringe
   Intake.spin(fwd, 100, pct);
-  Lifter.spin(fwd,50, pct);
+  Lifter.spin(fwd,100, pct);
   wait(1000, msec);
   //Gets mobile goal and scores 3 rings.
   inchDriveP(15.5);
@@ -460,29 +458,33 @@ switch(Case)
   wait(10, msec);
   gyroTurn(170);
   wait(10, msec);
-  inchDriveP(38);
+  inchDriveP(30);
   wait(1000, msec);
-  inchDriveP(-11);
+  drive(100, 100, 1000);
+  inchDriveP(-7);
   Intake.stop();
   wait(10, msec);
   gyroTurn(-100);
   wait(10, msec);
   Intake.spin(fwd, 100, pct);
-  Lifter.spin(fwd, 50, pct);
+  Lifter.spin(fwd, 100, pct);
   inchDriveP(11);
   wait(1500, msec);
   inchDriveP(-4);
   wait(10, msec);
   gyroTurn(-120);
-  inchDriveP(-12);
+  wait(500, msec);
+  Intake.stop();
+  Lifter.stop();
+  drive(-100, -100, 1000);
   wait(100, msec);
   clampPush(true);
   Intake.stop();
   Lifter.stop();
   wait(10, msec);
-  inchDriveP(25);
+  inchDriveP(24);
   wait(10, msec);
-  gyroTurn(-150);
+  gyroTurn(-135);
   inchDriveP(-55);
   wait(10, msec);
   inchDriveSlow(-5);
@@ -496,41 +498,24 @@ switch(Case)
   wait(1500, msec);
   gyroTurn(-90);
   wait(10, msec);
-  inchDriveP(-10);
-  /*inchDriveP(-11);
-  Intake.stop();
-  wait(10, msec);
-  gyroTurn(100);
-  wait(10, msec);
-  Intake.spin(fwd, 100, pct);
-  Lifter.spin(fwd, 50, pct);
-  inchDriveP(11);
-  wait(1500, msec);
-  gyroTurn(100);
-  inchDriveP(-12);
-  wait(100, msec);
-  clampPush(true);
-  Intake.stop();
-  Lifter.stop();
-  wait(10, msec);
-  inchDriveP(30);*/
+  drive(-100, -100, 1000);
   }
   break;
 
   case 3:{
     clampPush(true);
     inchDriveP(-18);
-    gyroTurn(-45);
+    gyroTurn(-37.5);
     inchDriveP(-17);
     clampPush(false);
     wait(1000, msec);
     Lifter.spin(fwd, 70, pct);
     Intake.spin(fwd, 100, pct);
     wait(200, msec);
-    gyroTurn(-55);
+    gyroTurn(-47);
     inchDriveP(20);
     wait(1000, msec);
-    gyroTurn(170);
+    gyroTurn(181.5);
     Lifter.stop();
     Intake.stop();
     wait(10, msec);
