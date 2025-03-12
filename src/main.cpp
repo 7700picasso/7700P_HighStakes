@@ -87,7 +87,7 @@ void olGyroTurn(float target, int speed){
 void gyroTurn(float target)
 {   
   float heading=0.0;
-  float accuracy=2.0;
+  float accuracy=2.5;
   float error=target-heading;
   float kp=0.45;
   float speed=kp*error;
@@ -456,7 +456,7 @@ switch(Case)
   wait(10, msec);
   clampPush(false);
   wait(10, msec);
-  gyroTurn(170);
+  gyroTurn(180);
   wait(10, msec);
   inchDriveP(30);
   wait(1000, msec);
@@ -469,7 +469,7 @@ switch(Case)
   Intake.spin(fwd, 100, pct);
   Lifter.spin(fwd, 100, pct);
   inchDriveP(11);
-  wait(1500, msec);
+  wait(500, msec);
   inchDriveP(-4);
   wait(10, msec);
   gyroTurn(-120);
@@ -482,23 +482,35 @@ switch(Case)
   Intake.stop();
   Lifter.stop();
   wait(10, msec);
-  inchDriveP(24);
+  inchDriveP(27);
   wait(10, msec);
-  gyroTurn(-135);
+  gyroTurn(-136);
   inchDriveP(-55);
   wait(10, msec);
-  inchDriveSlow(-5);
+  gyroTurn(-10);
+  wait(10, msec);
+  inchDriveSlow(-8.5);
   wait(10, msec);
   clampPush(false);
-  gyroTurn(170);
+  gyroTurn(180);
   Intake.spin(fwd, 100, pct);
   Lifter.spin(fwd, 50, pct);
   wait(10, msec);
   inchDriveP(32);
   wait(1500, msec);
-  gyroTurn(-90);
+  drive(100, 100, 1000);
+  wait(10, msec);
+  inchDriveP(-10);
+  Intake.stop();
+  Lifter.stop();
+  wait(10, msec);
+  gyroTurn(-120);
   wait(10, msec);
   drive(-100, -100, 1000);
+  wait(10, msec);
+  clampPush(true);
+  wait(10, msec);
+
   }
   break;
 
