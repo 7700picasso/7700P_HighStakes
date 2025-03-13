@@ -178,6 +178,7 @@ void inchDrivePi(float target){
     speed=kp*error;
   }
   driveBrake();
+  
 }
 
 void inchDriveP(float target) {
