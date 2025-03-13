@@ -87,9 +87,9 @@ void olGyroTurn(float target, int speed){
 void gyroTurn(float target)
 {   
   float heading=0.0;
-  float accuracy=2.5;
+  float accuracy=2;
   float error=target-heading;
-  float kp=0.45;
+  float kp=0.6;
   float speed=kp*error;
   Gyro.setRotation(0.0, degrees);
   
@@ -163,7 +163,7 @@ float kp=1.5;                                   ;
   
 
 
-void inchDriveP(float target){
+void inchDrivePi(float target){
   float x=0;
   float error=target;
   float kp=3.0;
@@ -179,6 +179,30 @@ void inchDriveP(float target){
   }
   driveBrake();
 }
+
+void inchDriveP(float target) {
+  Brain.Screen.printAt(1, 20, "Inch Drive Start");
+  float x = 0.0;
+  float error = target - x;
+  float speed = 40.0;
+  float accuracy = 0.2;
+  float ks = 0.10;
+  float yaw = 0.0;
+  float lspeed = speed * fabs(error) / error - ks * yaw;
+  float rspeed = speed * fabs(error) / error + ks * yaw;
+  
+  Gyro.setRotation(0.0, deg);
+  RB.setPosition(0, rev);
+  while (fabs(error) > accuracy) {
+  drive(lspeed, rspeed, 10);
+  x = RB.position(rev) * PI * D * G;
+  error = target - x;
+  yaw = Gyro.rotation(degrees);
+  lspeed = speed * fabs(error) / error - ks * yaw;
+  rspeed = speed * fabs(error) / error + ks * yaw;
+  }
+  drive(0,0,0);
+  }
 
 void inchDriveSlow(float target){
   float x=0;
@@ -253,7 +277,7 @@ void Display()
   if (LF.installed()){
     MotorDisplay(1, leftFrontCurr, leftFrontTemp);
     Brain.Screen.printAt(300, YOFFSET + 1, "LeftFront");
-  }else
+  }
     Brain.Screen.printAt(5, YOFFSET + 1, "LeftFront Problem");
 
   if (LB.installed())
@@ -341,7 +365,7 @@ void Drawgui(){
   Brain.Screen.printAt(320, 190, "Eliminations");
 }
 
-int Case = 2;
+int Case = 0;
 int depth = 0;
 void Autonselector(){
   int Xpos = Brain.Screen.xPosition();
@@ -415,6 +439,7 @@ switch(Case)
 {
   case 0: {
     Brain.Screen.clearScreen();
+    
   }
   break;
   case 1: {
@@ -439,12 +464,12 @@ switch(Case)
   }
   break;
   case 2:{
-  //Scores alliance stake. and cole is very sigma and has mid cut and is a mariners fan which is cringe
+  //Scores alliance stake. and cole is very sigma and has no aura
   Intake.spin(fwd, 100, pct);
   Lifter.spin(fwd,100, pct);
   wait(1000, msec);
   //Gets mobile goal and scores 3 rings.
-  inchDriveP(15.5);
+  inchDriveP(16);
   wait(10, msec);
   gyroTurn(85);
   wait(10, msec);
@@ -456,11 +481,11 @@ switch(Case)
   wait(10, msec);
   clampPush(false);
   wait(10, msec);
-  gyroTurn(180);
+  gyroTurn(172);
   wait(10, msec);
   inchDriveP(30);
   wait(1000, msec);
-  drive(100, 100, 1000);
+  drive(20, 20, 1000);
   inchDriveP(-7);
   Intake.stop();
   wait(10, msec);
@@ -473,7 +498,7 @@ switch(Case)
   inchDriveP(-4);
   wait(10, msec);
   gyroTurn(-120);
-  wait(500, msec);
+  wait(1000, msec);
   Intake.stop();
   Lifter.stop();
   drive(-100, -100, 1000);
@@ -484,7 +509,7 @@ switch(Case)
   wait(10, msec);
   inchDriveP(27);
   wait(10, msec);
-  gyroTurn(-136);
+  gyroTurn(-153);
   inchDriveP(-55);
   wait(10, msec);
   gyroTurn(-10);
@@ -496,9 +521,9 @@ switch(Case)
   Intake.spin(fwd, 100, pct);
   Lifter.spin(fwd, 50, pct);
   wait(10, msec);
-  inchDriveP(32);
-  wait(1500, msec);
-  drive(100, 100, 1000);
+  inchDriveP(20);
+  wait(100, msec);
+  drive(20, 20, 1000);
   wait(10, msec);
   inchDriveP(-10);
   Intake.stop();
@@ -512,8 +537,7 @@ switch(Case)
   wait(10, msec);
 
   }
-  break;
-
+  break;   // While ColekindaSigma = true{ Team = Good }
   case 3:{
     clampPush(true);
     inchDriveP(-18);
