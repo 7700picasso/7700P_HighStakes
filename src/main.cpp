@@ -43,7 +43,7 @@ float G  = 0.75;
 float D = 3.25;
 float PI = 3.14;
 int toggle = 0; 
-float armPositions[] = {0.0, 10.0, 90.0, 97.0};
+float armPositions[] = {0.0, 15.0, 90.0, 97.0};
 int currentPositionindex = 0;
 float target = 0;
 /*---------------------------------------------------------------------------*/
@@ -87,9 +87,9 @@ void olGyroTurn(float target, int speed){
 void gyroTurn(float target)
 {   
   float heading=0.0;
-  float accuracy=2.0;
+  float accuracy=2;
   float error=target-heading;
-  float kp=0.45;
+  float kp=0.55;
   float speed=kp*error;
   Gyro.setRotation(0.0, degrees);
   
@@ -112,11 +112,11 @@ target = armPositions[currentPositionindex];
 
 void armRotationcontrol(){   
   float position = 0.0;
-  float accuracy= 2.0;
+  float accuracy= 3.0;
   float error= target -position;
-float kp=0.3                                   ;
+float kp=1.5;                                   ;
   float previousError = 0.0;  // Store the previous error for derivative control
-  float kd = 0.5;  // Derivative gain
+  float kd = 0.1;  // Derivative gain
   float speed=0;
   
   // rotationSensor.resetPosition(); // strange
@@ -163,7 +163,7 @@ float kp=0.3                                   ;
   
 
 
-void inchDriveP(float target){
+void inchDrivePi(float target){
   float x=0;
   float error=target;
   float kp=3.0;
@@ -178,7 +178,32 @@ void inchDriveP(float target){
     speed=kp*error;
   }
   driveBrake();
+
 }
+
+void inchDriveP(float target) {
+  Brain.Screen.printAt(1, 20, "Inch Drive Start");
+  float x = 0.0;
+  float error = target - x;
+  float speed = 40.0;
+  float accuracy = 0.2;
+  float ks = 0.10;
+  float yaw = 0.0;
+  float lspeed = speed * fabs(error) / error - ks * yaw;
+  float rspeed = speed * fabs(error) / error + ks * yaw;
+  
+  Gyro.setRotation(0.0, deg);
+  RB.setPosition(0, rev);
+  while (fabs(error) > accuracy) {
+  drive(lspeed, rspeed, 10);
+  x = RB.position(rev) * PI * D * G;
+  error = target - x;
+  yaw = Gyro.rotation(degrees);
+  lspeed = speed * fabs(error) / error - ks * yaw;
+  rspeed = speed * fabs(error) / error + ks * yaw;
+  }
+  drive(0,0,0);
+  }
 
 void inchDriveSlow(float target){
   float x=0;
@@ -253,7 +278,7 @@ void Display()
   if (LF.installed()){
     MotorDisplay(1, leftFrontCurr, leftFrontTemp);
     Brain.Screen.printAt(300, YOFFSET + 1, "LeftFront");
-  }else
+  }
     Brain.Screen.printAt(5, YOFFSET + 1, "LeftFront Problem");
 
   if (LB.installed())
@@ -415,24 +440,26 @@ switch(Case)
 {
   case 0: {
     Brain.Screen.clearScreen();
+    gyroTurn(180); 
+    inchDriveP(10); 
+    gyroTurn(90); 
+    
   }
   break;
   case 1: {
     clampPush(true);
     inchDriveP(-18);
-    gyroTurn(35);
-    inchDriveSlow(-13);
-    drive(-15, -15, 670);
-    driveBrake();
+    gyroTurn(33);
+    inchDriveSlow(-14);
     clampPush(false);
-    wait(1500, msec);
+    wait(100, msec);
     Lifter.spin(fwd, 70, pct);
     Intake.spin(fwd, 100, pct);
     wait(200, msec);
-    gyroTurn(50);
+    gyroTurn(42.5);
     inchDriveP(21);
     wait(1500, msec);
-    gyroTurn(-185);
+    gyroTurn(-175);
     Lifter.stop();
     Intake.stop();
     wait(10, msec);
@@ -441,12 +468,12 @@ switch(Case)
   }
   break;
   case 2:{
-  //Scores alliance stake.
+  //Scores alliance stake. and cole is very sigma and has no aura
   Intake.spin(fwd, 100, pct);
-  Lifter.spin(fwd,50, pct);
+  Lifter.spin(fwd,100, pct);
   wait(1000, msec);
   //Gets mobile goal and scores 3 rings.
-  inchDriveP(15.5);
+  inchDriveP(14);
   wait(10, msec);
   gyroTurn(85);
   wait(10, msec);
@@ -458,79 +485,79 @@ switch(Case)
   wait(10, msec);
   clampPush(false);
   wait(10, msec);
-  gyroTurn(170);
+  gyroTurn(172);
   wait(10, msec);
-  inchDriveP(38);
-  wait(1000, msec);
-  inchDriveP(-11);
+  inchDriveP(30);
+  wait(500, msec);
+  drive(20, 20, 1000);
+  inchDriveP(-7);
   Intake.stop();
   wait(10, msec);
   gyroTurn(-100);
   wait(10, msec);
   Intake.spin(fwd, 100, pct);
-  Lifter.spin(fwd, 50, pct);
+  Lifter.spin(fwd, 100, pct);
   inchDriveP(11);
-  wait(1500, msec);
+  wait(500, msec);
   inchDriveP(-4);
   wait(10, msec);
   gyroTurn(-120);
-  inchDriveP(-12);
+  wait(1000, msec);
+  Intake.stop();
+  Lifter.stop();
+  drive(-100, -100, 1000);
   wait(100, msec);
   clampPush(true);
   Intake.stop();
   Lifter.stop();
   wait(10, msec);
-  inchDriveP(25);
-  wait(10, msec);
-  gyroTurn(-150);
-  inchDriveP(-55);
-  wait(10, msec);
-  inchDriveSlow(-5);
-  wait(10, msec);
-  clampPush(false);
-  gyroTurn(170);
-  Intake.spin(fwd, 100, pct);
-  Lifter.spin(fwd, 50, pct);
-  wait(10, msec);
-  inchDriveP(32);
-  wait(1500, msec);
-  gyroTurn(-90);
-  wait(10, msec);
-  inchDriveP(-10);
-  /*inchDriveP(-11);
-  Intake.stop();
-  wait(10, msec);
-  gyroTurn(100);
-  wait(10, msec);
-  Intake.spin(fwd, 100, pct);
-  Lifter.spin(fwd, 50, pct);
-  inchDriveP(11);
-  wait(1500, msec);
-  gyroTurn(100);
-  inchDriveP(-12);
-  wait(100, msec);
-  clampPush(true);
-  Intake.stop();
-  Lifter.stop();
-  wait(10, msec);
-  inchDriveP(30);*/
-  }
-  break;
+    //first set done
 
+  // inchDriveP(27);
+  // wait(10, msec);
+  // gyroTurn(-153);
+  // inchDriveP(-55);
+  // wait(10, msec);
+  // gyroTurn(-10);
+  // wait(10, msec);
+  // inchDriveSlow(-8.5);
+  // wait(10, msec);
+  // clampPush(false);
+  // gyroTurn(180);
+  // Intake.spin(fwd, 100, pct);
+  // Lifter.spin(fwd, 50, pct);
+  // wait(10, msec);
+  // inchDriveP(20);
+  // wait(100, msec);
+  // drive(20, 20, 1000);
+  // wait(10, msec);
+  // inchDriveP(-10);
+  // Intake.stop();
+  // Lifter.stop();
+  // wait(10, msec);
+  // gyroTurn(-120);
+  // wait(10, msec);
+  // drive(-100, -100, 1000);
+  // wait(10, msec);
+  // clampPush(true);
+  // wait(10, msec);
+
+  }
+  break;   // While ColekindaSigma = true{ Team = Good }
   case 3:{
     clampPush(true);
     inchDriveP(-18);
-    gyroTurn(-45);
+    gyroTurn(-37.5);
     inchDriveP(-17);
     clampPush(false);
     wait(1000, msec);
     Lifter.spin(fwd, 70, pct);
     Intake.spin(fwd, 100, pct);
     wait(200, msec);
-    gyroTurn(-55);
+    gyroTurn(-47);
     inchDriveP(20);
     wait(1000, msec);
-    gyroTurn(170);
+    gyroTurn(181.5);
     Lifter.stop();
     Intake.stop();
     wait(10, msec);
@@ -603,7 +630,7 @@ void usercontrol(void) {
       //  Brain.Screen.printAt(20, 60, "AP: %.2f", Arm.position(deg));
 //wait(10000, msec);
      Brain.Screen.clearScreen(); 
-   Display();
+      Display();
     
     int lspeed = Controller1.Axis3.position(pct);
     int rspeed = Controller1.Axis2.position(pct);
